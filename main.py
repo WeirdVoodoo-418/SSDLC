@@ -16,7 +16,7 @@ def system_info():
         print(f"  File system type: {partition.fstype}")
         try:
             drive = psutil.disk_usage(partition.mountpoint)
-            print(f"  Total Size: {round(drive.total / (1024 * 1024 * 1024)):} GB")
+            print(f"  Total Size: {round(drive.total / (1024 * 1024 * 1024))} GB")
             print(f"  Used: {round(drive.used / (1024 * 1024 * 1024))} GB")
             print(f"  Free: {round(drive.free / (1024 * 1024 * 1024))} GB")
         except PermissionError:
@@ -75,13 +75,13 @@ class JSONFileManager:
         return f"JSON file '{self.file_name}' deleted."
 
 
-json_data = {
-    "username": "root",
-    "permissions": "root",
-    "importance_level": 777,
-    "text": "I'm just a simple data, uwu :3",
-}
-json_file_manager = JSONFileManager('example_data\data.json')
-print(json_file_manager.create_and_write_json(json_data))
-print(json_file_manager.read_json())
-print(json_file_manager.delete_file())
+# json_data = {
+#     "username": "root",
+#     "permissions": "root",
+#     "importance_level": 777,
+#     "text": "I'm just a simple data, uwu :3",
+# }
+# json_file_manager = JSONFileManager('example_data\data.json')
+# print(json_file_manager.create_and_write_json(json_data))
+# print(json_file_manager.read_json())
+# print(json_file_manager.delete_file())
