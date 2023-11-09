@@ -2,6 +2,7 @@ import psutil
 import os
 import json
 import xml.etree.ElementTree as ET
+import zipfile
 
 def system_info():
     # This function will print the logical drives, names, volume label, size and file system type
@@ -49,11 +50,11 @@ class FileManager:
         os.remove(self.file_name)
         return f"File '{self.file_name}' deleted."
 
-# file_manager = FileManager('demo_file.txt')
-# print(file_manager.create_file())
-# print(file_manager.write_to_file('Hello SSDLC!'))
-# print(file_manager.read_file())
-# print(file_manager.delete_file())
+file_manager = FileManager('demo_file.txt')
+print(file_manager.create_file())
+print(file_manager.write_to_file('Hello SSDLC!'))
+print(file_manager.read_file())
+print(file_manager.delete_file())
 
 
 
@@ -76,16 +77,16 @@ class JSONFileManager:
         return f"JSON file '{self.file_name}' deleted."
 
 
-# json_data = {
-#     "username": "root",
-#     "permissions": "root",
-#     "importance_level": 777,
-#     "text": "I'm just a simple data, uwu :3",
-# }
-# json_file_manager = JSONFileManager('example_data\data.json')
-# print(json_file_manager.create_and_write_json(json_data))
-# print(json_file_manager.read_json())
-# print(json_file_manager.delete_file())
+json_data = {
+    "username": "root",
+    "permissions": "root",
+    "importance_level": 777,
+    "text": "I'm just a simple data, uwu :3",
+}
+json_file_manager = JSONFileManager('example_data\data.json')
+print(json_file_manager.create_and_write_json(json_data))
+print(json_file_manager.read_json())
+print(json_file_manager.delete_file())
 
 class XMLFileManager:
     def __init__(self, file_name):
@@ -121,3 +122,39 @@ xml_file_manager = XMLFileManager('example_data\data.xml')
 print(xml_file_manager.create_and_write_xml(xml_data))
 print(xml_file_manager.read_xml())
 print(xml_file_manager.delete_file())
+
+class ZipFileManager:
+    def __init__(self, zip_file_name):
+        self.zip_file_name = zip_file_name
+
+    def create_zip_archive(self):
+        with zipfile.ZipFile(self.zip_file_name, 'w') as _:
+            pass
+        return f"Zip archive '{self.zip_file_name}' created."
+
+    def add_file_to_zip(self, file_name):
+        with zipfile.ZipFile(self.zip_file_name, 'a') as zipf:
+            zipf.write(file_name)
+        return f"File '{file_name}' added to the zip archive '{self.zip_file_name}'."
+
+    def extract_and_display_info(self):
+        with zipfile.ZipFile(self.zip_file_name, 'r') as zipf:
+            zipf.extractall("extracted")
+            info = zipf.infolist()
+            extracted_info = [(file.filename, file.file_size) for file in info]
+        return f"Extracted files: {extracted_info}"
+
+    def delete_files_and_archive(self, file_name):
+        os.remove(file_name)
+        os.remove(self.zip_file_name)
+        return f"File '{file_name}' and archive '{self.zip_file_name}' deleted."
+
+zip_manager = ZipFileManager('example_data\demo_archive.zip')
+print(zip_manager.create_zip_archive())
+
+file_manager = FileManager('example_data\demo_file.txt')
+file_manager.create_file()
+
+print(zip_manager.add_file_to_zip('example_data\demo_file.txt'))
+print(zip_manager.extract_and_display_info())
+print(zip_manager.delete_files_and_archive('example_data\demo_file.txt'))
