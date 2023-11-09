@@ -1,6 +1,7 @@
 import psutil
 import os
 import json
+import xml.etree.ElementTree as ET
 
 def system_info():
     # This function will print the logical drives, names, volume label, size and file system type
@@ -85,3 +86,38 @@ class JSONFileManager:
 # print(json_file_manager.create_and_write_json(json_data))
 # print(json_file_manager.read_json())
 # print(json_file_manager.delete_file())
+
+class XMLFileManager:
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def create_and_write_xml(self, data):
+        root = ET.Element("root")
+        for key, value in data.items():
+            ET.SubElement(root, key).text = value
+        tree = ET.ElementTree(root)
+        tree.write(self.file_name)
+        return f"XML file '{self.file_name}' created and data written."
+
+    def read_xml(self):
+        tree = ET.parse(self.file_name)
+        root = tree.getroot()
+        xml_str = ET.tostring(root, encoding='unicode', method='xml')
+        return f"Content of '{self.file_name}':\n{xml_str}"
+
+    def delete_file(self):
+        os.remove(self.file_name)
+        return f"XML file '{self.file_name}' deleted."
+
+
+# Example usage:
+xml_data = {
+    "username": "root",
+    "permissions": "root",
+    "importance_level": "777",
+    "text": "I'm just a simple data, uwu :3",
+}
+xml_file_manager = XMLFileManager('example_data\data.xml')
+print(xml_file_manager.create_and_write_xml(xml_data))
+print(xml_file_manager.read_xml())
+print(xml_file_manager.delete_file())
