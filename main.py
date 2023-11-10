@@ -25,8 +25,6 @@ def system_info():
             print("  Access Denied.")
         print()
 
-# system_info()
-
 class FileManager:
     def __init__(self, file_name):
         self.file_name = file_name
@@ -50,14 +48,6 @@ class FileManager:
         os.remove(self.file_name)
         return f"File '{self.file_name}' deleted."
 
-file_manager = FileManager('demo_file.txt')
-print(file_manager.create_file())
-print(file_manager.write_to_file('Hello SSDLC!'))
-print(file_manager.read_file())
-print(file_manager.delete_file())
-
-
-
 class JSONFileManager:
     def __init__(self, file_name):
         self.file_name = file_name
@@ -75,18 +65,6 @@ class JSONFileManager:
     def delete_file(self):
         os.remove(self.file_name)
         return f"JSON file '{self.file_name}' deleted."
-
-
-json_data = {
-    "username": "root",
-    "permissions": "root",
-    "importance_level": 777,
-    "text": "I'm just a simple data, uwu :3",
-}
-json_file_manager = JSONFileManager('example_data\data.json')
-print(json_file_manager.create_and_write_json(json_data))
-print(json_file_manager.read_json())
-print(json_file_manager.delete_file())
 
 class XMLFileManager:
     def __init__(self, file_name):
@@ -110,19 +88,6 @@ class XMLFileManager:
         os.remove(self.file_name)
         return f"XML file '{self.file_name}' deleted."
 
-
-# Example usage:
-xml_data = {
-    "username": "root",
-    "permissions": "root",
-    "importance_level": "777",
-    "text": "I'm just a simple data, uwu :3",
-}
-xml_file_manager = XMLFileManager('example_data\data.xml')
-print(xml_file_manager.create_and_write_xml(xml_data))
-print(xml_file_manager.read_xml())
-print(xml_file_manager.delete_file())
-
 class ZipFileManager:
     def __init__(self, zip_file_name):
         self.zip_file_name = zip_file_name
@@ -145,16 +110,74 @@ class ZipFileManager:
         return f"Extracted files: {extracted_info}"
 
     def delete_files_and_archive(self, file_name):
-        os.remove(file_name)
+        if(file_name != ''):
+            os.remove(file_name)
         os.remove(self.zip_file_name)
         return f"File '{file_name}' and archive '{self.zip_file_name}' deleted."
 
-zip_manager = ZipFileManager('example_data\demo_archive.zip')
-print(zip_manager.create_zip_archive())
+def main():
+    while True:
+        operation = input("What do you want to do: [system, file, json, xml, zip, exit]: ").lower()
+        
+        if operation == 'exit':
+            break
 
-file_manager = FileManager('example_data\demo_file.txt')
-file_manager.create_file()
+        if operation == 'system':
+            system_info()
+        elif operation == 'file':
+            file_name = input("Enter the filename: ")
+            file_manager = FileManager(file_name)
+            file_action = input("What do you want to do: [create, write, read, delete]: ").lower()
+            if file_action == 'create':
+                print(file_manager.create_file())
+            elif file_action == 'write':
+                content = input("Enter content to write in the file: ")
+                print(file_manager.write_to_file(content))
+            elif file_action == 'read':
+                print(file_manager.read_file())
+            elif file_action == 'delete':
+                print(file_manager.delete_file())
+        elif operation == 'json':
+            file_name = input("Enter the JSON filename: ")
+            json_file_manager = JSONFileManager(file_name)
+            json_action = input("What do you want to do: [create and write, read, delete]: ").lower()
+            if json_action == 'create and write':
+                json_data = input("Enter JSON data (in dictionary format): ")
+                json_data_dict = json.loads(json_data)
+                print(json_file_manager.create_and_write_json(json_data_dict))
+            elif json_action == 'read':
+                print(json_file_manager.read_json())
+            elif json_action == 'delete':
+                print(json_file_manager.delete_file())
+        elif operation == 'xml':
+            file_name = input("Enter the XML filename: ")
+            xml_file_manager = XMLFileManager(file_name)
+            xml_action = input("What do you want to do: [create and write, read, delete]: ").lower()
+            if xml_action == 'create and write':
+                xml_data = input("Enter XML data (in dictionary format): ")
+                xml_data_dict = json.loads(xml_data)
+                print(xml_file_manager.create_and_write_xml(xml_data_dict))
+            elif xml_action == 'read':
+                print(xml_file_manager.read_xml())
+            elif xml_action == 'delete':
+                print(xml_file_manager.delete_file())
+        elif operation == 'zip':
+            zip_file_name = input("Enter the zip filename: ")
+            zip_manager = ZipFileManager(zip_file_name)
+            zip_action = input("What do you want to do: [create, add file, extract and display, delete]: ").lower()
+            if zip_action == 'create':
+                print(zip_manager.create_zip_archive())
+            elif zip_action == 'add file':
+                file_name = input("Enter the name of the file to add to the zip archive: ")
+                print(zip_manager.add_file_to_zip(file_name))
+            elif zip_action == 'extract and display':
+                print(zip_manager.extract_and_display_info())
+            elif zip_action == 'delete':
+                file_name = input("Enter the name of the file to delete along with the archive: ")
+                print(zip_manager.delete_files_and_archive(file_name))
 
-print(zip_manager.add_file_to_zip('example_data\demo_file.txt'))
-print(zip_manager.extract_and_display_info())
-print(zip_manager.delete_files_and_archive('example_data\demo_file.txt'))
+        else:
+            print("Invalid operation. Please try again.")
+
+if __name__ == '__main__':
+    main()
